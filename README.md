@@ -1,6 +1,6 @@
 "# Document Intelligence Assistant
 
-Phase 1 establishes the runnable web application foundation for a document-grounded AI assistant. It includes responsive navigation for Documents, Ask AI, Batch Questions, and Settings, plus empty states for the upcoming workflows.
+Phase 3 adds local vector retrieval to the document-grounded assistant. Documents are extracted into passages, embedded with Ollama, stored in ChromaDB, and searched through the Ask AI tab.
 
 ## Technology stack
 
@@ -31,10 +31,13 @@ For development with automatic restarts:
 npm run dev
 ```
 
-## Phase 1 verification
+## Phase 2 verification
 
-- Visit the application and use each sidebar item to switch views.
-- Confirm the root URL redirects to the Documents tab.
+- Visit the application and open the Documents tab.
+- Upload PDF, TXT, or Markdown files and observe processing and indexing status.
+- Confirm processed documents show passage and page counts.
+- Ask a question from the Ask AI tab and inspect retrieved citations.
+- Delete a document and confirm it is removed from the library.
 - Confirm the API responds from `GET /api/health`.
 - Resize the browser to verify the responsive sidebar and four-tab layout.
 
@@ -64,10 +67,35 @@ frontend/
     settings.js
 ```
 
+## Phase 3 setup
+
+- Install Python dependencies:
+
+```powershell
+pip install -r backend/python/requirements.txt
+```
+
+- Start Ollama and install the embedding model:
+
+```powershell
+ollama pull nomic-embed-text
+```
+
+- The backend uses Ollama at `http://localhost:11434` and persists ChromaDB data under `backend/data/vector_db`.
+
 ## Known limitations
 
-Phase 1 uses intentionally empty application data. Upload processing, PDF/TXT/Markdown extraction, Ollama, ChromaDB, citations, version handling, and batch execution will be implemented in later phases.
+This phase uses `nomic-embed-text` for embeddings and `llama3.2:3b` for strict evidence-only answer generation. Retrieval accepts cosine distances up to `0.60`; lower distances are more relevant. Uploads and queries fail explicitly if Ollama, either local model, or ChromaDB is unavailable.
+
+## Phase 2 implementation
+
+- `POST /api/documents/upload` accepts up to 10 PDF, TXT, or Markdown files, with a 25 MB per-file limit.
+- `GET /api/documents` returns document metadata and processing status.
+- `DELETE /api/documents/:documentId` removes the source file and metadata.
+- TXT and Markdown extraction runs through `backend/python/text_processor.py`.
+- PDF extraction runs through `backend/python/pdf_processor.py` and requires PyMuPDF.
+- Extracted passage metadata includes passage ID, section, page, and content.
 
 ## Next phase
 
-Phase 2 will add validated PDF, TXT, and Markdown uploads, Python-based extraction, passage metadata, processing status, and document management."
+Phase 4 will add grounded answer generation, classification validation, and citation-safe responses."

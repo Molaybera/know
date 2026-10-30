@@ -5,10 +5,11 @@
   "description": "Express backend for the Document Intelligence Assistant",
   "main": "server.js",
   "scripts": {
-    "start": "nodemon server.js",
+    "start": "node server.js",
     "dev": "node --watch server.js"
   },
   "dependencies": {
-    "express": "^4.21.2"
+    "express": "^4.21.2",
+    "multer": "^2.0.2"
   }
 }
