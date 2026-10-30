@@ -9,9 +9,18 @@
   const content = document.querySelector("#answer-content");
   if (!form) return;
 
-  const escapeHtml = (value) => String(value).replace(/[&<>"']/g, (character) => ({
-    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;",
-  }[character]));
+  const escapeHtml = (value) =>
+    String(value).replace(
+      /[&<>"']/g,
+      (character) =>
+        ({
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#039;",
+        })[character],
+    );
 
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
@@ -20,7 +29,8 @@
     button.disabled = true;
     button.textContent = "Searching...";
     content.hidden = false;
-    content.innerHTML = "<p class=\"answer-loading\">Searching indexed passages...</p>";
+    content.innerHTML =
+      '<p class="answer-loading">Searching indexed passages...</p>';
     try {
       const response = await fetch("/api/query", {
         method: "POST",

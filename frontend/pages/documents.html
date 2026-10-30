@@ -1,23 +1,124 @@
 <!-- File: frontend/pages/documents.html -->
 <!-- Purpose: Provides document upload, processing status, and document management. -->
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Documents · Know</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/documents.css"><link rel="stylesheet" href="/css/responsive.css">
-</head>
-<body>
-  <div class="app-shell"><aside class="sidebar" id="sidebar"><div class="brand"><div class="brand-mark">K</div><div><strong>Know</strong><span>Document intelligence</span></div></div><nav class="primary-nav" aria-label="Primary navigation"><a class="nav-item" href="/pages/documents.html" data-page="documents"><span class="nav-icon">▤</span>Documents</a><a class="nav-item" href="/pages/ask.html" data-page="ask"><span class="nav-icon">✦</span>Ask AI</a><a class="nav-item" href="/pages/batch.html" data-page="batch"><span class="nav-icon">☷</span>Batch Questions</a><a class="nav-item" href="/pages/settings.html" data-page="settings"><span class="nav-icon">⚙</span>Settings</a></nav><div class="sidebar-footer"><div class="local-status"><span class="status-dot"></span><span>Local workspace</span></div><small>Private by design</small></div></aside>
-    <main class="main-content"><header class="topbar"><button class="menu-button" id="menu-button" type="button" aria-label="Toggle navigation">☰</button><div class="breadcrumbs"><span>Workspace</span><b>/</b><strong>Documents</strong></div><div class="topbar-actions"><span class="phase-badge">PHASE 2</span><button class="avatar" type="button" aria-label="Account">M</button></div></header>
-      <div class="page-content"><section class="page-heading"><div><p class="eyebrow">Knowledge library</p><h1>Documents</h1><p>Upload source material and track its searchable passage index.</p></div><span class="count-pill" id="document-count">0 documents</span></section>
-        <section class="upload-zone" id="upload-zone"><div class="upload-symbol">↑</div><h2>Drop documents here</h2><p>Upload PDF, TXT, or Markdown files to build your knowledge layer.</p><input id="file-input" type="file" accept=".pdf,.txt,.md,text/plain,text/markdown,application/pdf" multiple hidden><button class="button button-primary" id="choose-files" type="button">Choose files</button><small>Up to 10 files per upload · 25 MB maximum per file</small><p class="upload-feedback" id="upload-feedback" role="status"></p></section>
-        <section class="panel document-list"><div class="panel-heading"><div><p class="eyebrow">Library</p><h2>All documents</h2></div><span class="muted" id="document-summary">Loading...</span></div><div class="documents-table" id="documents-table"></div><div class="empty-state compact" id="empty-documents"><div class="empty-icon">▤</div><h3>No documents uploaded</h3><p>Once you add source material, processing status and document details will appear here.</p></div></section>
-      </div><footer class="footer">Know <span>·</span> Document Intelligence Assistant <span>·</span> Local workspace</footer>
-    </main>
-  </div>
-  <script src="/js/app.js" defer></script><script src="/js/upload.js" defer></script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Documents · Know</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/documents.css" />
+    <link rel="stylesheet" href="/css/responsive.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" id="sidebar">
+        <div class="brand">
+          <div class="brand-mark">K</div>
+          <div><strong>Know</strong><span>Document intelligence</span></div>
+        </div>
+        <nav class="primary-nav" aria-label="Primary navigation">
+          <a class="nav-item" href="/pages/documents.html" data-page="documents"
+            ><span class="nav-icon">▤</span>Documents</a
+          ><a class="nav-item" href="/pages/ask.html" data-page="ask"
+            ><span class="nav-icon">✦</span>Ask AI</a
+          ><a class="nav-item" href="/pages/batch.html" data-page="batch"
+            ><span class="nav-icon">☷</span>Batch Questions</a
+          ><a class="nav-item" href="/pages/settings.html" data-page="settings"
+            ><span class="nav-icon">⚙</span>Settings</a
+          >
+        </nav>
+        <div class="sidebar-footer">
+          <div class="local-status">
+            <span class="status-dot"></span><span>Local workspace</span>
+          </div>
+          <small>Private by design</small>
+        </div>
+      </aside>
+      <main class="main-content">
+        <header class="topbar">
+          <button
+            class="menu-button"
+            id="menu-button"
+            type="button"
+            aria-label="Toggle navigation"
+          >
+            ☰
+          </button>
+          <div class="breadcrumbs">
+            <span>Workspace</span><b>/</b><strong>Documents</strong>
+          </div>
+          <div class="topbar-actions">
+            <span class="phase-badge">PHASE 2</span
+            ><button class="avatar" type="button" aria-label="Account">
+              M
+            </button>
+          </div>
+        </header>
+        <div class="page-content">
+          <section class="page-heading">
+            <div>
+              <p class="eyebrow">Knowledge library</p>
+              <h1>Documents</h1>
+              <p>
+                Upload source material and track its searchable passage index.
+              </p>
+            </div>
+            <span class="count-pill" id="document-count">0 documents</span>
+          </section>
+          <section class="upload-zone" id="upload-zone">
+            <div class="upload-symbol">↑</div>
+            <h2>Drop documents here</h2>
+            <p>
+              Upload PDF, TXT, or Markdown files to build your knowledge layer.
+            </p>
+            <input
+              id="file-input"
+              type="file"
+              accept=".pdf,.txt,.md,text/plain,text/markdown,application/pdf"
+              multiple
+              hidden
+            /><button
+              class="button button-primary"
+              id="choose-files"
+              type="button"
+            >
+              Choose files</button
+            ><small>Up to 10 files per upload · 25 MB maximum per file</small>
+            <p class="upload-feedback" id="upload-feedback" role="status"></p>
+          </section>
+          <section class="panel document-list">
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">Library</p>
+                <h2>All documents</h2>
+              </div>
+              <span class="muted" id="document-summary">Loading...</span>
+            </div>
+            <div class="documents-table" id="documents-table"></div>
+            <div class="empty-state compact" id="empty-documents">
+              <div class="empty-icon">▤</div>
+              <h3>No documents uploaded</h3>
+              <p>
+                Once you add source material, processing status and document
+                details will appear here.
+              </p>
+            </div>
+          </section>
+        </div>
+        <footer class="footer">
+          Know <span>·</span> Document Intelligence Assistant
+          <span>·</span> Local workspace
+        </footer>
+      </main>
+    </div>
+    <script src="/js/app.js" defer></script>
+    <script src="/js/upload.js" defer></script>
+  </body>
 </html>

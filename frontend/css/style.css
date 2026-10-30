@@ -1,4 +1,318 @@
 /* File: frontend/css/style.css */
 /* Purpose: Defines shared application layout, typography, controls, and visual tokens. */
-:root{--ink:#17202e;--muted:#758095;--line:#e6eaf0;--paper:#f8fafc;--white:#fff;--purple:#6857e8;--purple-dark:#5141ca;--navy:#1d2738;--green:#32a56a;--shadow:0 12px 34px rgba(34,45,68,.06)}
-*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:"DM Sans",sans-serif;font-size:15px}.app-shell{display:flex;min-height:100vh}.sidebar{background:#fff;border-right:1px solid var(--line);display:flex;flex-direction:column;padding:29px 18px 24px;width:244px;flex-shrink:0}.brand{align-items:center;display:flex;gap:11px;padding:0 13px 42px}.brand-mark{align-items:center;background:var(--ink);border-radius:11px;color:#fff;display:flex;font-family:"Space Grotesk";font-size:20px;font-weight:700;height:38px;justify-content:center;width:38px}.brand strong{display:block;font-family:"Space Grotesk";font-size:18px;letter-spacing:-.4px}.brand span{color:#a1aabb;display:block;font-size:10px;margin-top:2px}.primary-nav{display:grid;gap:7px}.nav-item{align-items:center;border-radius:10px;color:#7a8497;display:flex;font-size:13px;font-weight:600;gap:13px;padding:12px 13px;text-decoration:none;transition:background .2s,color .2s}.nav-item:hover{background:#f4f3ff;color:var(--purple)}.nav-item.is-active{background:#f0efff;color:var(--purple)}.nav-icon{font-size:17px;font-weight:400;text-align:center;width:19px}.sidebar-footer{border-top:1px solid var(--line);color:#9ba4b4;font-size:11px;margin-top:auto;padding:21px 13px 0}.local-status{align-items:center;color:#616c7c;display:flex;font-size:11px;gap:8px;margin-bottom:8px}.status-dot{background:#54c982;border-radius:50%;height:7px;width:7px}.main-content{display:flex;flex:1;flex-direction:column;min-width:0}.topbar{align-items:center;background:#fff;border-bottom:1px solid var(--line);display:flex;height:75px;justify-content:space-between;padding:0 42px}.breadcrumbs{align-items:center;color:#a0a9b8;display:flex;font-size:12px;gap:11px}.breadcrumbs b{color:#d8dce4;font-weight:400}.breadcrumbs strong{color:var(--ink);font-weight:600}.topbar-actions{align-items:center;display:flex;gap:18px}.phase-badge,.availability-pill{background:#f5f2e7;border-radius:20px;color:#a48643;font-size:10px;font-weight:700;letter-spacing:.7px;padding:7px 10px}.avatar{background:#ebe9fc;border:0;border-radius:50%;color:var(--purple);font-size:12px;font-weight:700;height:33px;width:33px}.menu-button{display:none}.page-content{margin:0 auto;padding:48px 42px 25px;width:100%;max-width:1370px}.hero,.page-heading{align-items:flex-end;display:flex;justify-content:space-between;margin-bottom:39px}.eyebrow{color:var(--purple);font-size:10px;font-weight:700;letter-spacing:1.6px;margin:0 0 9px;text-transform:uppercase}.hero h1,.page-heading h1{font-family:"Space Grotesk";font-size:35px;letter-spacing:-1.5px;line-height:1.1;margin:0}.hero h1 em{color:var(--purple);font-style:normal}.hero-copy,.page-heading p:not(.eyebrow){color:var(--muted);font-size:14px;margin:13px 0 0}.button{align-items:center;border:0;border-radius:8px;cursor:pointer;display:inline-flex;font-family:inherit;font-size:12px;font-weight:700;gap:10px;justify-content:center;padding:12px 17px;text-decoration:none}.button-primary{background:var(--purple);box-shadow:0 6px 14px #6857e82b;color:#fff}.button-primary:hover{background:var(--purple-dark)}.button-secondary{background:#f0efff;color:var(--purple)}.button-dark{background:var(--navy);color:#fff}.button:disabled{cursor:not-allowed;opacity:.5}.panel{background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow)}.panel-heading{align-items:flex-start;display:flex;justify-content:space-between}.panel-heading h2{font-family:"Space Grotesk";font-size:17px;letter-spacing:-.4px;margin:0}.panel-heading a{color:var(--purple);font-size:11px;font-weight:700;text-decoration:none}.panel-heading a span{font-size:16px;margin-left:4px}.empty-state{text-align:center}.empty-icon{align-items:center;background:#f2f1ff;border-radius:14px;color:var(--purple);display:flex;font-size:24px;height:53px;justify-content:center;margin:0 auto 15px;width:53px}.empty-state h3,.feature-empty h2{font-family:"Space Grotesk";font-size:16px;margin:0 0 8px}.empty-state p,.feature-empty p{color:var(--muted);font-size:12px;line-height:1.6;margin:0 auto 19px;max-width:310px}.footer{color:#a5adba;font-size:10px;margin:auto 42px 25px;text-align:right}.footer span{color:#d3d8e0;margin:0 5px}
+:root {
+  --ink: #17202e;
+  --muted: #758095;
+  --line: #e6eaf0;
+  --paper: #f8fafc;
+  --white: #fff;
+  --purple: #6857e8;
+  --purple-dark: #5141ca;
+  --navy: #1d2738;
+  --green: #32a56a;
+  --shadow: 0 12px 34px rgba(34, 45, 68, 0.06);
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: "DM Sans", sans-serif;
+  font-size: 15px;
+}
+.app-shell {
+  display: flex;
+  min-height: 100vh;
+}
+.sidebar {
+  background: #fff;
+  border-right: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  padding: 29px 18px 24px;
+  width: 244px;
+  flex-shrink: 0;
+}
+.brand {
+  align-items: center;
+  display: flex;
+  gap: 11px;
+  padding: 0 13px 42px;
+}
+.brand-mark {
+  align-items: center;
+  background: var(--ink);
+  border-radius: 11px;
+  color: #fff;
+  display: flex;
+  font-family: "Space Grotesk";
+  font-size: 20px;
+  font-weight: 700;
+  height: 38px;
+  justify-content: center;
+  width: 38px;
+}
+.brand strong {
+  display: block;
+  font-family: "Space Grotesk";
+  font-size: 18px;
+  letter-spacing: -0.4px;
+}
+.brand span {
+  color: #a1aabb;
+  display: block;
+  font-size: 10px;
+  margin-top: 2px;
+}
+.primary-nav {
+  display: grid;
+  gap: 7px;
+}
+.nav-item {
+  align-items: center;
+  border-radius: 10px;
+  color: #7a8497;
+  display: flex;
+  font-size: 13px;
+  font-weight: 600;
+  gap: 13px;
+  padding: 12px 13px;
+  text-decoration: none;
+  transition:
+    background 0.2s,
+    color 0.2s;
+}
+.nav-item:hover {
+  background: #f4f3ff;
+  color: var(--purple);
+}
+.nav-item.is-active {
+  background: #f0efff;
+  color: var(--purple);
+}
+.nav-icon {
+  font-size: 17px;
+  font-weight: 400;
+  text-align: center;
+  width: 19px;
+}
+.sidebar-footer {
+  border-top: 1px solid var(--line);
+  color: #9ba4b4;
+  font-size: 11px;
+  margin-top: auto;
+  padding: 21px 13px 0;
+}
+.local-status {
+  align-items: center;
+  color: #616c7c;
+  display: flex;
+  font-size: 11px;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.status-dot {
+  background: #54c982;
+  border-radius: 50%;
+  height: 7px;
+  width: 7px;
+}
+.main-content {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+.topbar {
+  align-items: center;
+  background: #fff;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  height: 75px;
+  justify-content: space-between;
+  padding: 0 42px;
+}
+.breadcrumbs {
+  align-items: center;
+  color: #a0a9b8;
+  display: flex;
+  font-size: 12px;
+  gap: 11px;
+}
+.breadcrumbs b {
+  color: #d8dce4;
+  font-weight: 400;
+}
+.breadcrumbs strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+.topbar-actions {
+  align-items: center;
+  display: flex;
+  gap: 18px;
+}
+.phase-badge,
+.availability-pill {
+  background: #f5f2e7;
+  border-radius: 20px;
+  color: #a48643;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.7px;
+  padding: 7px 10px;
+}
+.avatar {
+  background: #ebe9fc;
+  border: 0;
+  border-radius: 50%;
+  color: var(--purple);
+  font-size: 12px;
+  font-weight: 700;
+  height: 33px;
+  width: 33px;
+}
+.menu-button {
+  display: none;
+}
+.page-content {
+  margin: 0 auto;
+  padding: 48px 42px 25px;
+  width: 100%;
+  max-width: 1370px;
+}
+.hero,
+.page-heading {
+  align-items: flex-end;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 39px;
+}
+.eyebrow {
+  color: var(--purple);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.6px;
+  margin: 0 0 9px;
+  text-transform: uppercase;
+}
+.hero h1,
+.page-heading h1 {
+  font-family: "Space Grotesk";
+  font-size: 35px;
+  letter-spacing: -1.5px;
+  line-height: 1.1;
+  margin: 0;
+}
+.hero h1 em {
+  color: var(--purple);
+  font-style: normal;
+}
+.hero-copy,
+.page-heading p:not(.eyebrow) {
+  color: var(--muted);
+  font-size: 14px;
+  margin: 13px 0 0;
+}
+.button {
+  align-items: center;
+  border: 0;
+  border-radius: 8px;
+  cursor: pointer;
+  display: inline-flex;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  gap: 10px;
+  justify-content: center;
+  padding: 12px 17px;
+  text-decoration: none;
+}
+.button-primary {
+  background: var(--purple);
+  box-shadow: 0 6px 14px #6857e82b;
+  color: #fff;
+}
+.button-primary:hover {
+  background: var(--purple-dark);
+}
+.button-secondary {
+  background: #f0efff;
+  color: var(--purple);
+}
+.button-dark {
+  background: var(--navy);
+  color: #fff;
+}
+.button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+.panel {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+}
+.panel-heading {
+  align-items: flex-start;
+  display: flex;
+  justify-content: space-between;
+}
+.panel-heading h2 {
+  font-family: "Space Grotesk";
+  font-size: 17px;
+  letter-spacing: -0.4px;
+  margin: 0;
+}
+.panel-heading a {
+  color: var(--purple);
+  font-size: 11px;
+  font-weight: 700;
+  text-decoration: none;
+}
+.panel-heading a span {
+  font-size: 16px;
+  margin-left: 4px;
+}
+.empty-state {
+  text-align: center;
+}
+.empty-icon {
+  align-items: center;
+  background: #f2f1ff;
+  border-radius: 14px;
+  color: var(--purple);
+  display: flex;
+  font-size: 24px;
+  height: 53px;
+  justify-content: center;
+  margin: 0 auto 15px;
+  width: 53px;
+}
+.empty-state h3,
+.feature-empty h2 {
+  font-family: "Space Grotesk";
+  font-size: 16px;
+  margin: 0 0 8px;
+}
+.empty-state p,
+.feature-empty p {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.6;
+  margin: 0 auto 19px;
+  max-width: 310px;
+}
+.footer {
+  color: #a5adba;
+  font-size: 10px;
+  margin: auto 42px 25px;
+  text-align: right;
+}
+.footer span {
+  color: #d3d8e0;
+  margin: 0 5px;
+}

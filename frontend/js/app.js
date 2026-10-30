@@ -15,5 +15,4 @@
   menuButton?.addEventListener("click", () => {
     sidebar?.classList.toggle("is-open");
   });
-
 })();
