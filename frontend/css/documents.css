@@ -111,6 +111,19 @@
   background: #fff3df;
   color: #bc8032;
 }
+.loading-inline {
+  align-items: center;
+  display: inline-flex;
+  gap: 6px;
+}
+.status-spinner {
+  border-color: #bc803266;
+  border-top-color: #bc8032;
+  height: 11px;
+  margin-right: 5px;
+  vertical-align: -1px;
+  width: 11px;
+}
 .status-failed {
   background: #ffebeb;
   color: #c45151;

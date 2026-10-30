@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document reference · Know</title>
+    <link rel="stylesheet" href="/css/viewer.css" />
+  </head>
+  <body>
+    <header class="viewer-header">
+      <strong id="viewer-title">Document reference</strong>
+      <span id="viewer-status"><span class="viewer-spinner"></span> Loading page…</span>
+    </header>
+    <main class="viewer-main">
+      <div id="pdf-page" class="pdf-page">
+        <canvas id="pdf-canvas"></canvas>
+        <div id="text-layer" class="text-layer"></div>
+      </div>
+    </main>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.min.mjs" type="module"></script>
+    <script src="/js/viewer.js" type="module"></script>
+  </body>
+</html>

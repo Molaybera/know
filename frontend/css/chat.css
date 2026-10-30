@@ -1,7 +1,178 @@
 /* File: frontend/css/chat.css */
 /* Purpose: Styles the Ask AI workspace and grounded-answer empty state. */
 .ask-page {
-  max-width: 1050px;
+  max-width: none;
+}
+.chat-app-shell {
+  height: 100vh;
+  min-height: 0;
+  overflow: hidden;
+}
+.chat-app-shell .main-content {
+  height: 100vh;
+  min-height: 0;
+  overflow: hidden;
+}
+.chat-app-shell .footer {
+  display: none;
+}
+.chat-app-shell .page-content {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  max-width: none;
+  overflow: hidden;
+  padding-bottom: 18px;
+}
+.chat-app-shell .page-heading {
+  flex-shrink: 0;
+  margin-bottom: 20px;
+}
+.chat-workspace {
+  align-items: stretch;
+  display: grid;
+  flex: 1;
+  gap: 20px;
+  grid-template-columns: minmax(0, 1fr);
+  min-height: 0;
+}
+.chat-history {
+  align-self: start;
+  min-height: 390px;
+  padding: 15px 9px;
+}
+.chat-history-heading {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  padding: 3px 7px 10px;
+}
+.chat-history-heading h2 {
+  font-family: "Space Grotesk";
+  font-size: 17px;
+  margin: 0;
+}
+.chat-count {
+  align-items: center;
+  background: #f0efff;
+  border-radius: 20px;
+  color: var(--purple);
+  display: flex;
+  font-size: 10px;
+  font-weight: 700;
+  height: 24px;
+  justify-content: center;
+  min-width: 24px;
+}
+.chat-list {
+  display: grid;
+  gap: 5px;
+}
+.chat-list-item {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  border-radius: 9px;
+  color: var(--ink);
+  cursor: pointer;
+  display: flex;
+  gap: 9px;
+  padding: 11px 8px;
+  text-align: left;
+  width: 100%;
+}
+.chat-list-item:hover,
+.chat-list-item.is-active {
+  background: #f0efff;
+}
+.chat-list-icon {
+  color: var(--purple);
+  font-size: 14px;
+}
+.chat-list-copy {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+.chat-list-copy strong {
+  font-size: 11px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.chat-list-copy small {
+  color: var(--muted);
+  font-size: 9px;
+}
+.chat-history-empty {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.5;
+  padding: 16px 8px;
+}
+.history-page-list {
+  display: grid;
+  gap: 0;
+  padding: 8px 20px;
+}
+.history-page-item {
+  align-items: center;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  gap: 12px;
+  padding: 17px 4px;
+  text-decoration: none;
+}
+.history-page-item:last-child {
+  border-bottom: 0;
+}
+.history-actions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: flex-end;
+}
+.history-action-button {
+  background: transparent;
+  border: 0;
+  color: var(--purple);
+  cursor: pointer;
+  font: inherit;
+  font-size: 15px;
+  line-height: 1;
+  padding: 4px;
+}
+.history-action-button:hover {
+  text-decoration: underline;
+}
+.history-delete {
+  color: #c45151;
+}
+.history-open {
+  color: var(--purple);
+  font-size: 11px;
+  font-weight: 700;
+}
+.history-page-empty {
+  color: var(--muted);
+  font-size: 13px;
+  padding: 30px;
+  text-align: center;
+}
+.chat-empty.has-messages {
+  align-items: stretch;
+  min-height: 0;
+  padding: 20px;
+  text-align: left;
+}
+.chat-empty.has-messages .chat-orbit,
+.chat-empty.has-messages #chat-title,
+.chat-empty.has-messages #chat-intro {
+  display: none;
 }
 .chat-empty {
   align-items: center;
@@ -10,6 +181,16 @@
   min-height: 345px;
   padding: 55px 25px;
   text-align: center;
+}
+.chat-column {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.chat-column .chat-empty {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
 }
 .chat-orbit {
   align-items: center;
@@ -42,6 +223,7 @@
   border: 1px solid var(--line);
   border-radius: 12px;
   display: flex;
+  flex-shrink: 0;
   gap: 12px;
   margin-top: 18px;
   padding: 12px;
@@ -62,6 +244,126 @@
   margin-top: 22px;
   text-align: left;
   width: 100%;
+}
+.chat-thread {
+  display: grid;
+  flex: 1;
+  gap: 16px;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 8px 4px;
+  text-align: left;
+  width: 100%;
+}
+.chat-column {
+  min-width: 0;
+}
+.chat-message {
+  border-radius: 12px;
+  padding: 14px 16px;
+}
+.user-message {
+  background: #f0efff;
+  margin-left: 12%;
+}
+.assistant-message {
+  background: #f8f9fc;
+  border: 1px solid var(--line);
+  margin-right: 0;
+  width: 100%;
+}
+.message-label {
+  color: var(--purple);
+  display: block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  margin-bottom: 7px;
+}
+.chat-message > p {
+  color: var(--ink);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.7;
+  margin: 0;
+}
+.assistant-message > p {
+  color: #26344a;
+  font-size: 17px;
+  line-height: 1.75;
+  max-width: none;
+  width: 100%;
+}
+.thinking-message {
+  min-height: 76px;
+}
+.thinking-copy {
+  color: var(--muted);
+  font-size: 13px;
+  margin-left: 10px;
+}
+.typing-dots {
+  display: inline-flex;
+  gap: 4px;
+  vertical-align: middle;
+}
+.typing-dots i,
+.button-spinner,
+.status-spinner {
+  animation: know-pulse 1.1s infinite ease-in-out;
+  background: var(--purple);
+  border-radius: 50%;
+  display: inline-block;
+  height: 7px;
+  width: 7px;
+}
+.typing-dots i:nth-child(2) {
+  animation-delay: 0.15s;
+}
+.typing-dots i:nth-child(3) {
+  animation-delay: 0.3s;
+}
+.button-spinner {
+  animation: know-spin 0.8s linear infinite;
+  border: 2px solid #ffffff66;
+  border-radius: 50%;
+  border-top-color: #fff;
+  height: 13px;
+  margin-right: 6px;
+  vertical-align: -2px;
+  width: 13px;
+}
+@keyframes know-pulse {
+  0%, 80%, 100% { opacity: 0.35; transform: scale(0.75); }
+  40% { opacity: 1; transform: scale(1); }
+}
+@keyframes know-spin {
+  to { transform: rotate(360deg); }
+}
+.assistant-message .answer-status {
+  margin-left: 8px;
+  vertical-align: middle;
+}
+.missing-information {
+  color: var(--muted);
+  display: block;
+  font-size: 11px;
+  margin-top: 8px;
+}
+.escalation-note {
+  background: #f3f1ff;
+  border-left: 3px solid var(--purple);
+  color: #3e347e;
+  font-size: 13px;
+  line-height: 1.5;
+  margin-top: 14px;
+  padding: 10px 12px;
+}
+.references-heading {
+  color: var(--ink);
+  display: block;
+  font-size: 13px;
+  margin-bottom: 10px;
 }
 .answer-status {
   background: #e8f7ef;
@@ -88,25 +390,206 @@
   gap: 10px;
   margin-top: 16px;
 }
-.citation-list article {
-  background: #f8f9fc;
+.reference-card {
+  background: #fff;
   border: 1px solid var(--line);
-  border-radius: 8px;
+  border-radius: 10px;
+  display: grid;
+  gap: 3px;
   padding: 12px;
+  line-height: 1.5;
 }
-.citation-list strong {
-  display: block;
+.reference-document {
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 600;
+}
+.reference-heading {
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 600;
+}
+.reference-meta {
+  color: #5b6680;
+  display: flex;
+  flex-wrap: wrap;
   font-size: 12px;
+  gap: 5px 18px;
 }
-.citation-list small {
+.reference-meta b {
   color: var(--purple);
-  display: block;
   font-size: 10px;
-  margin: 4px 0;
+  letter-spacing: 0.3px;
+  margin-right: 3px;
+  text-transform: uppercase;
 }
-.citation-list p {
+.reference-section {
+  color: var(--purple);
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+/* Answer text */
+.assistant-message > p.answer-summary {
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.6;
+  margin: 2px 0 0;
+}
+.answer-points {
+  display: grid;
+  gap: 8px;
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+}
+.answer-points li {
+  color: #26344a;
+  font-size: 14px;
+  line-height: 1.6;
+  padding-left: 22px;
+  position: relative;
+}
+.answer-points li::before {
+  background: var(--purple);
+  border-radius: 50%;
+  content: "";
+  height: 7px;
+  left: 6px;
+  position: absolute;
+  top: 0.6em;
+  width: 7px;
+}
+ 
+/* Next step */
+.next-step {
+  align-items: baseline;
+  background: #f3f1ff;
+  border-left: 3px solid var(--purple);
+  border-radius: 0 8px 8px 0;
+  color: #3e347e;
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 13px;
+  gap: 4px 10px;
+  line-height: 1.55;
+  margin-top: 14px;
+  padding: 10px 12px;
+}
+.next-step-label {
+  color: var(--purple);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+}
+ 
+/* Status badge colours */
+.answer-status.status-answered {
+  background: #e8f7ef;
+  color: #329460;
+}
+.answer-status.status-partial {
+  background: #fff4e0;
+  color: #b7791f;
+}
+.answer-status.status-none {
+  background: #eceef3;
+  color: #5b6680;
+}
+ 
+/* References as compact clickable chips */
+.citation-list {
+  border-top: 1px solid var(--line);
+  margin-top: 16px;
+  padding-top: 12px;
+}
+.references-heading {
+  align-items: center;
+  color: #5b6680;
+  display: flex;
+  font-size: 11px;
+  font-weight: 700;
+  gap: 7px;
+  letter-spacing: 0.4px;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+.references-count {
+  background: #f0efff;
+  border-radius: 20px;
+  color: var(--purple);
+  font-size: 10px;
+  padding: 2px 7px;
+}
+.no-references {
   color: var(--muted);
-  font-size: 11px !important;
-  line-height: 1.5 !important;
-  margin: 6px 0 0 !important;
+  font-size: 12px;
+  margin: 0;
 }
+.reference-chips {
+  display: grid;
+  gap: 8px;
+}
+.reference-chip {
+  align-items: center;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  color: var(--ink);
+  display: flex;
+  gap: 10px;
+  padding: 9px 12px;
+  text-decoration: none;
+  transition: border-color 0.15s, background 0.15s;
+}
+.reference-chip:hover {
+  background: #faf9ff;
+  border-color: var(--purple);
+}
+.reference-chip-icon {
+  align-items: center;
+  background: #f0efff;
+  border-radius: 7px;
+  color: var(--purple);
+  display: flex;
+  flex-shrink: 0;
+  font-size: 13px;
+  font-weight: 700;
+  height: 26px;
+  justify-content: center;
+  width: 26px;
+}
+.reference-chip-copy {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.reference-chip-label {
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+.reference-chip:hover .reference-chip-label {
+  color: var(--purple);
+}
+.reference-chip-doc {
+  color: var(--muted);
+  font-size: 11px;
+}
+.reference-chip-page {
+  background: #f0efff;
+  border-radius: 20px;
+  color: var(--purple);
+  flex-shrink: 0;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 4px 9px;
+}
+ 

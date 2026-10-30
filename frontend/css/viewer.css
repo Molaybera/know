@@ -1,0 +1,68 @@
+* {
+  box-sizing: border-box;
+}
+body {
+  background: #eef1f7;
+  color: #17202e;
+  font-family: "DM Sans", Arial, sans-serif;
+  margin: 0;
+}
+.viewer-header {
+  align-items: center;
+  background: #fff;
+  border-bottom: 1px solid #dfe4ed;
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+  padding: 16px 24px;
+}
+.viewer-header span {
+  color: #6857e8;
+  font-size: 13px;
+}
+.viewer-spinner {
+  animation: viewer-spin 0.8s linear infinite;
+  border: 2px solid #6857e866;
+  border-radius: 50%;
+  border-top-color: #6857e8;
+  display: inline-block;
+  height: 12px;
+  margin-right: 5px;
+  vertical-align: -2px;
+  width: 12px;
+}
+@keyframes viewer-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.viewer-main {
+  display: flex;
+  justify-content: center;
+  padding: 28px;
+}
+.pdf-page {
+  background: #fff;
+  box-shadow: 0 12px 30px #17202e22;
+  position: relative;
+}
+#pdf-canvas {
+  display: block;
+}
+.text-layer {
+  inset: 0;
+  overflow: hidden;
+  position: absolute;
+}
+.text-layer span {
+  color: transparent;
+  cursor: text;
+  position: absolute;
+  transform-origin: 0 0;
+  white-space: pre;
+}
+.text-layer span.highlight {
+  background: #ffe66d99;
+  box-shadow: 0 0 0 2px #f4c43066;
+  color: transparent;
+}

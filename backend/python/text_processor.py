@@ -15,9 +15,12 @@ def build_passages(text: str) -> list[dict]:
         heading = re.match(r"^(?:#{1,6}\s+|([A-Z][A-Za-z0-9 &/()-]{2,80})\s*$)", chunk)
         if heading and chunk.count("\n") == 0 and len(chunk) < 120:
             current_section = chunk.lstrip("# ").strip()
+        section_match = re.match(r"^(\d+(?:\.\d+)*)\b", current_section)
         passages.append({
             "passage_id": f"P{index:04d}",
             "section": current_section,
+            "section_number": section_match.group(1) if section_match else "—",
+            "heading": current_section,
             "page": 1,
             "content": chunk,
         })

@@ -45,8 +45,8 @@ function search(question, limit = 5) {
   return runRagCommand("search", { question, limit });
 }
 
-function answer(question) {
-  return runRagCommand("answer", { question });
+function answer(question, history = []) {
+  return runRagCommand("answer", { question, history });
 }
 
 function deleteDocument(documentId) {

@@ -1,0 +1,100 @@
+<!-- File: frontend/pages/history.html -->
+<!-- Purpose: Provides a dedicated tab for reopening saved Ask AI conversations. -->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>History · Know</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/chat.css" />
+    <link rel="stylesheet" href="/css/responsive.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" id="sidebar">
+        <div class="brand">
+          <div class="brand-mark">K</div>
+          <div><strong>Know</strong><span>Document intelligence</span></div>
+        </div>
+        <nav class="primary-nav" aria-label="Primary navigation">
+          <a class="nav-item" href="/pages/documents.html" data-page="documents"
+            ><span class="nav-icon">▤</span>Documents</a
+          >
+          <a class="nav-item" href="/pages/ask.html" data-page="ask"
+            ><span class="nav-icon">✦</span>Ask AI</a
+          >
+          <a
+            class="nav-item is-active"
+            href="/pages/history.html"
+            data-page="history"
+            ><span class="nav-icon">◷</span>History</a
+          >
+          <a class="nav-item" href="/pages/batch.html" data-page="batch"
+            ><span class="nav-icon">☷</span>Batch Questions</a
+          >
+          <a class="nav-item" href="/pages/settings.html" data-page="settings"
+            ><span class="nav-icon">⚙</span>Settings</a
+          >
+        </nav>
+        <div class="sidebar-footer">
+          <div class="local-status">
+            <span class="status-dot"></span><span>Local workspace</span>
+          </div>
+          <small>Private by design</small>
+        </div>
+      </aside>
+      <main class="main-content">
+        <header class="topbar">
+          <button
+            class="menu-button"
+            id="menu-button"
+            type="button"
+            aria-label="Toggle navigation"
+          >
+            ☰
+          </button>
+          <div class="breadcrumbs">
+            <span>Workspace</span><b>/</b><strong>History</strong>
+          </div>
+          <div class="topbar-actions">
+            <span class="phase-badge">PHASE 3</span
+            ><button class="avatar" type="button" aria-label="Account">
+              M
+            </button>
+          </div>
+        </header>
+        <div class="page-content ask-page">
+          <section class="page-heading">
+            <div>
+              <p class="eyebrow">Saved conversations</p>
+              <h1>History</h1>
+              <p>
+                Reopen a previous conversation and continue where you left off.
+              </p>
+            </div>
+          </section>
+          <section
+            class="history-page-list panel"
+            id="history-page-list"
+          ></section>
+          <p class="history-page-empty panel" id="history-page-empty">
+            No saved chats yet. Start a conversation in Ask AI.
+          </p>
+        </div>
+        <footer class="footer">
+          Know <span>·</span> Document Intelligence Assistant
+          <span>·</span> Local workspace
+        </footer>
+      </main>
+    </div>
+    <script src="/js/app.js" defer></script>
+    <script src="/js/history.js" defer></script>
+  </body>
+</html>

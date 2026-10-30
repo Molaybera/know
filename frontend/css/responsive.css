@@ -97,4 +97,22 @@
   .settings-grid {
     grid-template-columns: 1fr !important;
   }
+  .chat-workspace {
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(0, 1fr) auto;
+  }
+  .chat-app-shell .page-content {
+    padding-bottom: 12px;
+  }
+  .chat-app-shell .page-heading {
+    margin-bottom: 14px;
+  }
+  .chat-history {
+    min-height: auto;
+    order: 2;
+  }
+  .chat-list {
+    max-height: 180px;
+    overflow-y: auto;
+  }
 }

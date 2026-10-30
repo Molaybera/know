@@ -2,6 +2,7 @@
 // Purpose: Serves the frontend and wires document upload and management APIs.
 
 const express = require("express");
+const fs = require("fs");
 const path = require("path");
 const { upload, handleUpload } = require("./services/upload.service");
 const documentService = require("./services/document.service");
@@ -72,16 +73,56 @@ app.delete("/api/documents/:documentId", async (request, response) => {
   }
 });
 
+app.get("/api/documents/:documentId/file", async (request, response) => {
+  try {
+    const document = await documentService.getDocument(request.params.documentId);
+    if (!document || document.file_type !== "pdf") {
+      return response.status(404).json({ error: "PDF document not found." });
+    }
+    await fs.promises.access(document.file_path, fs.constants.R_OK);
+    return response.sendFile(path.resolve(document.file_path), {
+      headers: { "Content-Type": "application/pdf" },
+    });
+  } catch (error) {
+    console.error("Could not open document PDF:", error);
+    return response.status(404).json({ error: "PDF document is unavailable." });
+  }
+});
+
 app.post("/api/query", async (request, response) => {
   try {
     const question = typeof request.body.question === "string" ? request.body.question.trim() : "";
     if (!question) return response.status(400).json({ error: "Enter a question." });
-    const result = await ragService.answer(question);
+    const history = Array.isArray(request.body.history)
+      ? request.body.history
+        .filter((message) => message && ["user", "assistant"].includes(message.role) && typeof message.content === "string")
+        .slice(-8)
+      : [];
+    const result = await ragService.answer(question, history);
     return response.json({
       answer: result.answer,
       status: result.status,
       missing_information: result.missing_information,
-      citations: result.results.map((source) => ({ ...source.metadata, passage: source.content })),
+      offer_escalation: result.offer_escalation,
+      citations: result.results.map((source) => {
+        const sectionText = source.metadata.section || source.content || "";
+        const sectionNumber = source.metadata.section_number && source.metadata.section_number !== "—"
+          ? source.metadata.section_number
+          : sectionText.match(/^\d+(?:\.\d+)*/)?.[0] || "";
+        const rawHeading = source.metadata.heading || source.metadata.section || "";
+        const heading = rawHeading.replace(
+          new RegExp(`^${sectionNumber.replace(/\./g, "\\.")}\\s*`),
+          "",
+        ).trim();
+        return {
+          document_id: source.metadata.document_id,
+          document_name: source.metadata.document_name,
+          page: source.metadata.page,
+          section_number: sectionNumber,
+          heading,
+          highlight: sectionNumber || source.content,
+        };
+      }),
       retrieval: { count: result.results.length, distances: result.results.map((source) => source.distance) },
     });
   } catch (error) {

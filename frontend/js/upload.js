@@ -46,8 +46,8 @@
             ? `${document.passage_count} passages · ${document.page_count} page${document.page_count === 1 ? "" : "s"}`
             : document.status === "failed"
               ? escapeHtml(document.error || "Processing failed.")
-              : "Extracting text and passages...";
-        return `<article class="document-row"><div class="file-type">${escapeHtml(document.file_type.toUpperCase())}</div><div class="document-main"><strong>${escapeHtml(document.original_name)}</strong><small>${formatSize(document.file_size)} · ${detail}</small></div><span class="document-status status-${document.status}">${state}</span><button class="delete-document" data-id="${escapeHtml(document.document_id)}" type="button" aria-label="Delete ${escapeHtml(document.original_name)}">×</button></article>`;
+            : `<span class="loading-inline"><span class="button-spinner"></span> Extracting text and passages…</span>`;
+        return `<article class="document-row"><div class="file-type">${escapeHtml(document.file_type.toUpperCase())}</div><div class="document-main"><strong>${escapeHtml(document.original_name)}</strong><small>${formatSize(document.file_size)} · ${detail}</small></div><span class="document-status status-${document.status}">${document.status === "processing" ? '<span class="status-spinner"></span>' : ""}${state}</span><button class="delete-document" data-id="${escapeHtml(document.document_id)}" type="button" aria-label="Delete ${escapeHtml(document.original_name)}">×</button></article>`;
       })
       .join("");
     table.querySelectorAll(".delete-document").forEach((button) => {
@@ -77,7 +77,7 @@
     if (!files.length) return;
     const formData = new FormData();
     [...files].forEach((file) => formData.append("documents", file));
-    feedback.textContent = "Uploading and starting extraction...";
+    feedback.innerHTML = `<span class="loading-inline"><span class="button-spinner"></span> Uploading and starting extraction…</span>`;
     const response = await fetch("/api/documents/upload", {
       method: "POST",
       body: formData,
