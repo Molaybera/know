@@ -28,11 +28,18 @@ function pythonCommand() {
 }
 
 function runProcessor(file, outputPath) {
-  const extension = path.extname(file.originalname).toLowerCase();
-  const scriptName = extension === ".pdf" ? "pdf_processor.py" : "text_processor.py";
+  let scriptName = "text_processor.py";
+  let targetArg = file.path;
+  if (file.file_type === "url" || file.is_url) {
+    scriptName = "url_processor.py";
+    targetArg = file.url || file.path;
+  } else {
+    const extension = path.extname(file.originalname || "").toLowerCase();
+    scriptName = extension === ".pdf" ? "pdf_processor.py" : "text_processor.py";
+  }
   const scriptPath = path.join(__dirname, "..", "python", scriptName);
   return new Promise((resolve, reject) => {
-    const process = spawn(pythonCommand(), [scriptPath, file.path, outputPath], { stdio: ["ignore", "pipe", "pipe"] });
+    const process = spawn(pythonCommand(), [scriptPath, targetArg, outputPath], { stdio: ["ignore", "pipe", "pipe"] });
     let errorOutput = "";
     process.stderr.on("data", (chunk) => { errorOutput += chunk.toString(); });
     process.on("error", reject);
@@ -46,14 +53,24 @@ function runProcessor(file, outputPath) {
 async function processDocument(document) {
   const outputPath = path.join(documentService.uploadDirectory, `${document.document_id}.processed.json`);
   try {
-    await runProcessor({ originalname: document.original_name, path: document.file_path }, outputPath);
+    await runProcessor(
+      {
+        originalname: document.original_name,
+        path: document.file_path,
+        file_type: document.file_type,
+        is_url: document.file_type === "url",
+        url: document.url,
+      },
+      outputPath
+    );
     const processed = JSON.parse(await fs.readFile(outputPath, "utf8"));
     await fs.rm(outputPath, { force: true });
     const processedDocument = {
       ...document,
+      original_name: processed.title && document.file_type === "url" ? `${processed.title} (${document.original_name})` : document.original_name,
       status: "processed",
       processed_at: new Date().toISOString(),
-      page_count: processed.page_count,
+      page_count: processed.page_count || 1,
       passage_count: processed.passages.length,
       passages: processed.passages,
     };
@@ -90,4 +107,36 @@ async function handleUpload(file) {
   return { ...document, file_path: undefined, passages: undefined };
 }
 
-module.exports = { upload, handleUpload };
+async function handleUrl(webUrl) {
+  const documentId = `DOC-${crypto.randomUUID()}`;
+  let domain = "";
+  try {
+    domain = new URL(webUrl).hostname;
+  } catch {
+    domain = "webpage";
+  }
+
+  // Create a record holding the target URL
+  const tempPath = path.join(documentService.uploadDirectory, `${documentId}.url.txt`);
+  await fs.writeFile(tempPath, webUrl, "utf8");
+
+  const document = {
+    document_id: documentId,
+    original_name: domain || webUrl,
+    file_type: "url",
+    file_size: 0,
+    file_path: tempPath,
+    url: webUrl,
+    status: "processing",
+    created_at: new Date().toISOString(),
+    page_count: 0,
+    passage_count: 0,
+    passages: [],
+  };
+
+  await documentService.saveDocument(document);
+  processDocument(document);
+  return { ...document, file_path: undefined, passages: undefined };
+}
+
+module.exports = { upload, handleUpload, handleUrl };

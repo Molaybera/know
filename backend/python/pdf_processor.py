@@ -209,9 +209,13 @@ def main() -> None:
     if len(sys.argv) != 3:
         raise SystemExit("Usage: pdf_processor.py INPUT_PATH OUTPUT_PATH")
     try:
-        import fitz
-    except ImportError as error:
-        raise SystemExit("PyMuPDF is required for PDF processing. Install it with: pip install PyMuPDF") from error
+        import pymupdf as fitz  # type: ignore
+    except ImportError:
+        try:
+            import fitz  # type: ignore
+        except ImportError as error:
+            raise SystemExit("PyMuPDF is required for PDF processing. Install it with: pip install PyMuPDF") from error
+    
     input_path, output_path = map(Path, sys.argv[1:])
     document = fitz.open(input_path)
     pages = [extract_page_lines(page) for page in document]

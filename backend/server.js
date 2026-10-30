@@ -4,7 +4,7 @@
 const express = require("express");
 const fs = require("fs");
 const path = require("path");
-const { upload, handleUpload } = require("./services/upload.service");
+const { upload, handleUpload, handleUrl } = require("./services/upload.service");
 const documentService = require("./services/document.service");
 const ragService = require("./services/rag.service");
 
@@ -59,6 +59,31 @@ app.post("/api/documents/upload", (request, response, next) => {
   }
 });
 
+app.post("/api/documents/url", async (request, response) => {
+  try {
+    const rawUrl = typeof request.body?.url === "string" ? request.body.url.trim() : "";
+    if (!rawUrl) {
+      return response.status(400).json({ error: "Please enter a valid webpage URL." });
+    }
+    let parsed;
+    try {
+      parsed = new URL(rawUrl);
+      if (!["http:", "https:"].includes(parsed.protocol)) {
+        throw new Error();
+      }
+    } catch {
+      return response.status(400).json({ error: "Please enter a valid URL starting with http:// or https://" });
+    }
+
+    await documentService.ensureStorage();
+    const document = await handleUrl(rawUrl);
+    return response.status(202).json({ document });
+  } catch (error) {
+    console.error("Could not process webpage URL:", error);
+    return response.status(500).json({ error: "Could not start webpage processing." });
+  }
+});
+
 app.delete("/api/documents/:documentId", async (request, response) => {
   try {
     const document = await documentService.getDocument(request.params.documentId);
@@ -70,6 +95,17 @@ app.delete("/api/documents/:documentId", async (request, response) => {
   } catch (error) {
     console.error("Could not delete document:", error);
     return response.status(500).json({ error: "Could not delete document." });
+  }
+});
+
+app.get("/api/documents/:documentId", async (request, response) => {
+  try {
+    const document = await documentService.getDocument(request.params.documentId);
+    if (!document) return response.status(404).json({ error: "Document not found." });
+    return response.json({ document });
+  } catch (error) {
+    console.error("Could not fetch document:", error);
+    return response.status(500).json({ error: "Could not fetch document." });
   }
 });
 
@@ -99,29 +135,48 @@ app.post("/api/query", async (request, response) => {
         .slice(-8)
       : [];
     const result = await ragService.answer(question, history);
+
+    const citations = await Promise.all(result.results.map(async (source) => {
+      const sectionText = source.metadata.section || source.content || "";
+      const sectionNumber = source.metadata.section_number && source.metadata.section_number !== "—"
+        ? source.metadata.section_number
+        : sectionText.match(/^\d+(?:\.\d+)*/)?.[0] || "";
+      const rawHeading = source.metadata.heading || source.metadata.section || "";
+      const heading = rawHeading.replace(
+        new RegExp(`^${sectionNumber.replace(/\./g, "\\.")}\\s*`),
+        "",
+      ).trim();
+
+      let fileType = source.metadata.file_type || "";
+      let url = source.metadata.url || "";
+      if (!fileType || !url) {
+        try {
+          const doc = await documentService.getDocument(source.metadata.document_id);
+          if (doc) {
+            fileType = fileType || doc.file_type || "";
+            url = url || doc.url || "";
+          }
+        } catch {
+          // Ignore lookup failure
+        }
+      }
+
+      return {
+        document_id: source.metadata.document_id,
+        document_name: source.metadata.document_name,
+        page: source.metadata.page,
+        section_number: sectionNumber,
+        heading,
+        file_type: fileType,
+        url,
+      };
+    }));
+
     return response.json({
       answer: result.answer,
       status: result.status,
       missing_information: result.missing_information,
-      offer_escalation: result.offer_escalation,
-      citations: result.results.map((source) => {
-        const sectionText = source.metadata.section || source.content || "";
-        const sectionNumber = source.metadata.section_number && source.metadata.section_number !== "—"
-          ? source.metadata.section_number
-          : sectionText.match(/^\d+(?:\.\d+)*/)?.[0] || "";
-        const rawHeading = source.metadata.heading || source.metadata.section || "";
-        const heading = rawHeading.replace(
-          new RegExp(`^${sectionNumber.replace(/\./g, "\\.")}\\s*`),
-          "",
-        ).trim();
-        return {
-          document_id: source.metadata.document_id,
-          document_name: source.metadata.document_name,
-          page: source.metadata.page,
-          section_number: sectionNumber,
-          heading,
-        };
-      }),
+      citations,
       retrieval: { count: result.results.length, distances: result.results.map((source) => source.distance) },
     });
   } catch (error) {

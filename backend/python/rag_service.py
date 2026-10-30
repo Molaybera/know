@@ -39,7 +39,7 @@ def ollama_embedding(text: str) -> list[float]:
 
 def get_collection(db_path: str):
     try:
-        import chromadb
+        import chromadb  # type: ignore
     except ImportError as error:
         raise RuntimeError("ChromaDB is missing. Install dependencies with: pip install -r backend/python/requirements.txt") from error
     client = chromadb.PersistentClient(path=db_path)
@@ -69,6 +69,8 @@ def index_document(db_path: str, payload: dict) -> dict:
             ),
             "heading": passage.get("heading", passage["section"]),
             "page": passage["page"],
+            "url": str(payload.get("url") or ""),
+            "file_type": str(payload.get("file_type") or ""),
         }
         for passage in passages
     ]
@@ -178,13 +180,11 @@ def clean_points(value) -> list[str]:
     return points[:MAX_POINTS]
 
 
-def format_answer_text(summary: str, points: list[str], next_step: str) -> str:
+def format_answer_text(summary: str, points: list[str]) -> str:
     """Plain-text / markdown version of the structured answer (used as a fallback by the UI)."""
     parts = [summary]
     if points:
         parts.append("\n".join(f"- {point}" for point in points))
-    if next_step:
-        parts.append(f"Next step: {next_step}")
     return "\n\n".join(part for part in parts if part)
 
 
@@ -199,29 +199,26 @@ def ollama_answer(question: str, results: list[dict], history: list[dict]) -> di
         if m.get("content")
     )
     prompt = (
-        "You are a friendly HR policy assistant. Answer the question using ONLY the policy text below.\n"
-        "Write in simple, plain English that anyone can understand. Use your own words, do not copy the policy.\n\n"
+        "You are an intelligent document and policy assistant. Answer the question using ONLY the provided document text below.\n"
+        "Write in simple, plain English that anyone can understand. Use your own words, do not copy the text verbatim.\n\n"
         "Return JSON with exactly these keys:\n"
-        '- "summary": ONE or TWO short sentences that directly answer the question, with units (e.g. "working days").\n'
-        '- "points": a list of 0 to 5 short bullet points (each under 25 words) covering only the rules, conditions, '
-        "limits, deadlines or approvals that apply to this exact question. Use an empty list if the summary says it all. "
+        '- "summary": ONE or TWO short sentences that directly answer the question.\n'
+        '- "points": a list of 0 to 5 short bullet points covering only the key rules, conditions, '
+        "limits, or specifics that apply to this question. Use an empty list if the summary says it all. "
         "Do not add bullet characters or numbering inside the strings.\n"
-        '- "next_step": one short sentence telling the user what to do next, or null if nothing is needed.\n'
         '- "status": "ANSWERED" or "PARTIALLY ANSWERED".\n'
-        '- "missing_information": what the policy does not say, or null.\n'
-        '- "offer_escalation": true if the policy does not clearly cover the request or needs an exception, otherwise false.\n\n'
+        '- "missing_information": what the documents do not say, or null.\n\n'
         "Rules:\n"
         "- Do not list unrelated rules, repeat yourself, or mention 'evidence', 'passages' or section numbers.\n"
         "- Do not contradict yourself and do not guess.\n"
-        "- If the policy does not clearly cover it, say so in the summary and set next_step to: "
-        "'Would you like me to help draft an email to the Head of HR?'\n"
+        "- If the document does not clearly cover it, say so in the summary.\n"
         "- Use the conversation only to understand follow-up references.\n\n"
         f"Conversation:\n{conversation or '(new conversation)'}\n\n"
-        f"Question: {question}\n\nPolicy text:\n{evidence}"
+        f"Question: {question}\n\nDocument text:\n{evidence}"
     )
 
-    summary, points, next_step = "", [], ""
-    status, missing, escalate = "ANSWERED", None, False
+    summary, points = "", []
+    status, missing = "ANSWERED", None
 
     try:
         data = json.loads(request_answer(prompt, structured=True))
@@ -229,18 +226,16 @@ def ollama_answer(question: str, results: list[dict], history: list[dict]) -> di
             raise json.JSONDecodeError("Expected an object", "", 0)
         summary = clean_text(data.get("summary") or data.get("answer"))
         points = clean_points(data.get("points"))
-        next_step = clean_text(data.get("next_step"))
         status = data.get("status") if data.get("status") in {"ANSWERED", "PARTIALLY ANSWERED"} else "ANSWERED"
         missing = data.get("missing_information")
-        escalate = bool(data.get("offer_escalation"))
     except (RuntimeError, json.JSONDecodeError):
         retry_prompt = (
-            "Answer in simple, plain English using ONLY the policy text below. "
+            "Answer in simple, plain English using ONLY the document text below. "
             "Start with one or two sentences that directly answer the question. "
             "If several rules or conditions apply, list them as short lines starting with '- '. "
             "Keep it under 120 words. "
-            "If the policy does not cover it, say so and ask if the user wants help drafting an email to the Head of HR.\n\n"
-            f"Question: {question}\n\nPolicy text:\n{evidence}"
+            "If the document does not cover it, say so clearly.\n\n"
+            f"Question: {question}\n\nDocument text:\n{evidence}"
         )
         try:
             text = request_answer(retry_prompt, structured=False)
@@ -251,7 +246,7 @@ def ollama_answer(question: str, results: list[dict], history: list[dict]) -> di
         other_lines = [line for line in lines if line not in bullet_lines]
         summary = clean_text(" ".join(other_lines))
         points = clean_points(bullet_lines)
-        status, escalate = "PARTIALLY ANSWERED", True
+        status = "PARTIALLY ANSWERED"
 
     if not summary and points:
         summary, points = points[0], points[1:]
@@ -259,13 +254,13 @@ def ollama_answer(question: str, results: list[dict], history: list[dict]) -> di
         raise RuntimeError("The local answer model returned an empty answer after a retry.")
 
     return {
-        "answer": format_answer_text(summary, points, next_step),
+        "answer": format_answer_text(summary, points),
         "summary": summary,
         "points": points,
-        "next_step": next_step or None,
+        "next_step": None,
         "status": status,
         "missing_information": missing,
-        "offer_escalation": escalate,
+        "offer_escalation": False,
     }
 
 
@@ -274,13 +269,13 @@ def answer(db_path: str, payload: dict) -> dict:
     supported = [r for r in retrieval["results"] if r["distance"] <= RELEVANCE_DISTANCE_THRESHOLD]
     if not supported:
         return {
-            "answer": "This question is not covered by the uploaded documents.",
-            "summary": "This question is not covered by the uploaded documents.",
+            "answer": "This question is not covered by the uploaded documents or webpages.",
+            "summary": "This question is not covered by the uploaded documents or webpages.",
             "points": [],
-            "next_step": "Would you like me to help draft an email to the Head of HR?",
+            "next_step": None,
             "status": "NOT COVERED",
             "missing_information": "No sufficiently relevant passage was retrieved.",
-            "offer_escalation": True,
+            "offer_escalation": False,
             "results": [],
             "references": [],
         }
@@ -305,9 +300,17 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("command", choices=["index", "search", "answer", "delete"])
     parser.add_argument("--db-path", required=True)
-    parser.add_argument("--payload", required=True)
+    parser.add_argument("--payload", default="")
+    parser.add_argument("--payload-file", default="")
     arguments = parser.parse_args()
-    payload = json.loads(arguments.payload)
+
+    if arguments.payload_file:
+        payload = json.loads(Path(arguments.payload_file).read_text(encoding="utf-8"))
+    elif arguments.payload == "-" or not arguments.payload:
+        payload = json.loads(sys.stdin.read())
+    else:
+        payload = json.loads(arguments.payload)
+
     handlers = {"index": index_document, "search": search, "answer": answer, "delete": delete_document}
     result = handlers[arguments.command](arguments.db_path, payload)
     print(json.dumps(result), flush=True)
