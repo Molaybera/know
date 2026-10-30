@@ -13,6 +13,7 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/settings.css" />
     <link rel="stylesheet" href="/css/responsive.css" />
   </head>
   <body>
@@ -29,8 +30,6 @@
             ><span class="nav-icon">✦</span>Ask AI</a
           ><a class="nav-item" href="/pages/history.html" data-page="history"
             ><span class="nav-icon">◷</span>History</a
-          ><a class="nav-item" href="/pages/batch.html" data-page="batch"
-            ><span class="nav-icon">☷</span>Batch Questions</a
           ><a
             class="nav-item is-active"
             href="/pages/settings.html"
@@ -42,7 +41,6 @@
           <div class="local-status">
             <span class="status-dot"></span><span>Local workspace</span>
           </div>
-          <small>Private by design</small>
         </div>
       </aside>
       <main class="main-content">
@@ -59,8 +57,7 @@
             <span>Workspace</span><b>/</b><strong>Settings</strong>
           </div>
           <div class="topbar-actions">
-            <span class="phase-badge">PHASE 1</span
-            ><button class="avatar" type="button" aria-label="Account">
+            <button class="avatar" type="button" aria-label="Account">
               M
             </button>
           </div>
@@ -79,28 +76,16 @@
                 <span class="setting-icon">◉</span>
                 <div>
                   <h2>Ollama</h2>
-                  <p>Local answer generation and embeddings</p>
+                  <p>Connected answer model</p>
                 </div>
               </div>
-              <span class="availability-pill">Not connected</span
-              ><small>Connection checks will be available in Phase 3.</small>
-            </article>
-            <article class="panel setting-card">
-              <div class="setting-title">
-                <span class="setting-icon">◈</span>
-                <div>
-                  <h2>ChromaDB</h2>
-                  <p>Semantic passage search index</p>
-                </div>
-              </div>
-              <span class="availability-pill">Not connected</span
-              ><small>Vector storage will be configured in Phase 4.</small>
+              <span class="availability-pill">llama3.2:3b</span
+              ><small>Used for grounded document answers.</small>
             </article>
           </section>
         </div>
         <footer class="footer">
-          Know <span>·</span> Document Intelligence Assistant
-          <span>·</span> Local workspace
+          Know <span>
         </footer>
       </main>
     </div>

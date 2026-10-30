@@ -1,0 +1,46 @@
+/* File: frontend/css/settings.css */
+/* Purpose: Styles the connected model settings card. */
+.settings-grid {
+  display: grid;
+  grid-template-columns: minmax(280px, 520px);
+  gap: 20px;
+}
+.setting-card {
+  display: grid;
+  gap: 18px;
+  padding: 24px;
+}
+.setting-title {
+  align-items: center;
+  display: flex;
+  gap: 14px;
+}
+.setting-icon {
+  align-items: center;
+  background: #f0efff;
+  border-radius: 12px;
+  color: var(--purple);
+  display: flex;
+  font-size: 20px;
+  height: 44px;
+  justify-content: center;
+  width: 44px;
+}
+.setting-title h2 {
+  font-family: "Space Grotesk";
+  font-size: 19px;
+  margin: 0;
+}
+.setting-title p,
+.setting-card small {
+  color: var(--muted);
+  font-size: 12px;
+  margin: 5px 0 0;
+}
+.setting-card .availability-pill {
+  justify-self: start;
+  background: #e8f7ef;
+  color: #329460;
+  font-size: 12px;
+  letter-spacing: 0;
+}

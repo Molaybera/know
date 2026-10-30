@@ -120,7 +120,6 @@ app.post("/api/query", async (request, response) => {
           page: source.metadata.page,
           section_number: sectionNumber,
           heading,
-          highlight: sectionNumber || source.content,
         };
       }),
       retrieval: { count: result.results.length, distances: result.results.map((source) => source.distance) },

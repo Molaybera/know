@@ -182,7 +182,7 @@
         const key = `${citation.document_id}|${label}|${citation.page}`;
         if (seen.has(key)) return "";
         seen.add(key);
-        const viewerUrl = `/pages/viewer.html?document=${encodeURIComponent(citation.document_id || "")}&page=${encodeURIComponent(citation.page || 1)}&highlight=${encodeURIComponent(citation.highlight || "")}`;
+        const viewerUrl = `/pages/viewer.html?document=${encodeURIComponent(citation.document_id || "")}&page=${encodeURIComponent(citation.page || 1)}`;
         const page = `<span class="reference-chip-page">Page ${escapeHtml(citation.page ?? "—")}</span>`;
         const text = label
           ? `<span class="reference-chip-label">${escapeHtml(label)}</span>`

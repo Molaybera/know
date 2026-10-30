@@ -37,8 +37,9 @@ body {
   }
 }
 .viewer-main {
-  display: flex;
-  justify-content: center;
+  display: grid;
+  gap: 28px;
+  justify-items: center;
   padding: 28px;
 }
 .pdf-page {
@@ -46,23 +47,9 @@ body {
   box-shadow: 0 12px 30px #17202e22;
   position: relative;
 }
+.pdf-page.is-target-page {
+  box-shadow: 0 0 0 3px #6857e866, 0 12px 30px #17202e22;
+}
 #pdf-canvas {
   display: block;
-}
-.text-layer {
-  inset: 0;
-  overflow: hidden;
-  position: absolute;
-}
-.text-layer span {
-  color: transparent;
-  cursor: text;
-  position: absolute;
-  transform-origin: 0 0;
-  white-space: pre;
-}
-.text-layer span.highlight {
-  background: #ffe66d99;
-  box-shadow: 0 0 0 2px #f4c43066;
-  color: transparent;
 }
