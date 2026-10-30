@@ -1,0 +1,11 @@
+# Dependencies
+node_modules/
+
+# Local runtime data
+backend/data/
+vector_db/
+.env
+
+# Logs and temporary files
+*.log
+coverage/
