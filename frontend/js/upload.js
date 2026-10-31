@@ -47,7 +47,10 @@
             : document.status === "failed"
               ? escapeHtml(document.error || "Processing failed.")
             : `<span class="loading-inline"><span class="button-spinner"></span> Extracting text and passages…</span>`;
-        return `<article class="document-row"><div class="file-type">${escapeHtml(document.file_type.toUpperCase())}</div><div class="document-main"><strong>${escapeHtml(document.original_name)}</strong><small>${formatSize(document.file_size)} · ${detail}</small></div><span class="document-status status-${document.status}">${document.status === "processing" ? '<span class="status-spinner"></span>' : ""}${state}</span><button class="delete-document" data-id="${escapeHtml(document.document_id)}" type="button" aria-label="Delete ${escapeHtml(document.original_name)}">×</button></article>`;
+        const isUrl = document.file_type === "url";
+        const typeBadge = isUrl ? "URL" : escapeHtml(document.file_type.toUpperCase());
+        const sizeOrUrl = isUrl ? (document.url ? escapeHtml(document.url) : "Webpage") : formatSize(document.file_size);
+        return `<article class="document-row"><div class="file-type">${typeBadge}</div><div class="document-main"><strong>${escapeHtml(document.original_name)}</strong><small>${sizeOrUrl} · ${detail}</small></div><span class="document-status status-${document.status}">${document.status === "processing" ? '<span class="status-spinner"></span>' : ""}${state}</span><button class="delete-document" data-id="${escapeHtml(document.document_id)}" type="button" aria-label="Delete ${escapeHtml(document.original_name)}">×</button></article>`;
       })
       .join("");
     table.querySelectorAll(".delete-document").forEach((button) => {

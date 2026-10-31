@@ -14,7 +14,40 @@ body {
   display: flex;
   gap: 16px;
   justify-content: space-between;
-  padding: 16px 24px;
+  padding: 14px 24px;
+}
+.viewer-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.viewer-header-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.viewer-badge {
+  background: #efedff;
+  color: #6857e8;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+}
+.viewer-action-btn {
+  background: #fff;
+  border: 1px solid #6857e8;
+  border-radius: 8px;
+  color: #6857e8;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 12px;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.viewer-action-btn:hover {
+  background: #6857e8;
+  color: #fff;
 }
 .viewer-header span {
   color: #6857e8;
@@ -52,4 +85,83 @@ body {
 }
 #pdf-canvas {
   display: block;
+}
+
+/* Webpage Document Viewer Styles */
+.webpage-viewer {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(23, 32, 46, 0.08);
+  max-width: 860px;
+  padding: 36px 42px;
+  width: 100%;
+}
+.webpage-meta-card {
+  background: #f8f8fc;
+  border-left: 4px solid #6857e8;
+  border-radius: 8px;
+  margin-bottom: 30px;
+  padding: 16px 20px;
+}
+.webpage-meta-card h2 {
+  font-size: 18px;
+  margin: 0 0 6px;
+  color: #17202e;
+}
+.webpage-meta-card p {
+  color: #6a7381;
+  font-size: 12px;
+  margin: 0;
+  word-break: break-all;
+}
+.webpage-section-block {
+  border: 1px solid #eef0f6;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  padding: 18px 22px;
+  transition: all 0.25s ease;
+}
+.webpage-section-block.is-target-section {
+  background: #fcfbff;
+  border: 2px solid #6857e8;
+  box-shadow: 0 4px 20px rgba(104, 87, 232, 0.16);
+  position: relative;
+}
+.webpage-section-header {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.webpage-section-title {
+  color: #17202e;
+  font-size: 15px;
+  font-weight: 700;
+  margin: 0;
+}
+.section-badge {
+  background: #eef1f7;
+  border-radius: 6px;
+  color: #586376;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+}
+.target-reference-badge {
+  background: #6857e8;
+  border-radius: 20px;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  padding: 3px 9px;
+  text-transform: uppercase;
+}
+.webpage-section-content {
+  color: #374151;
+  font-size: 14px;
+  line-height: 1.65;
+  margin: 0;
+  white-space: pre-line;
 }

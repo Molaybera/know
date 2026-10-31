@@ -44,3 +44,46 @@
   font-size: 12px;
   letter-spacing: 0;
 }
+
+.url-import-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.url-input-wrapper {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.settings-input {
+  flex: 1;
+  min-width: 240px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid #d5d9e2;
+  font-family: inherit;
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.settings-input:focus {
+  border-color: var(--purple);
+  box-shadow: 0 0 0 3px rgba(100, 77, 237, 0.12);
+}
+
+.url-feedback {
+  font-size: 12px;
+  margin: 0;
+  min-height: 18px;
+}
+
+.url-feedback.success {
+  color: #1a7f37;
+}
+
+.url-feedback.error {
+  color: #cf222e;
+}

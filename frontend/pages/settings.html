@@ -73,14 +73,40 @@
           <section class="settings-grid">
             <article class="panel setting-card">
               <div class="setting-title">
+                <span class="setting-icon">🌐</span>
+                <div>
+                  <h2>Webpage & Policy Import</h2>
+                  <p>Add web pages or online policy URLs as knowledge sources</p>
+                </div>
+              </div>
+              <small>Enter any live webpage or policy document URL. It will be scraped, chunked, and embedded into your vector database for AI chat.</small>
+              <form class="url-import-form" id="url-import-form">
+                <div class="url-input-wrapper">
+                  <input
+                    type="url"
+                    id="webpage-url-input"
+                    class="settings-input"
+                    placeholder="https://example.com/privacy-policy"
+                    required
+                  />
+                  <button type="submit" class="button button-primary" id="import-url-button">
+                    Import Webpage
+                  </button>
+                </div>
+                <p class="url-feedback" id="url-feedback" role="status"></p>
+              </form>
+            </article>
+
+            <article class="panel setting-card">
+              <div class="setting-title">
                 <span class="setting-icon">◉</span>
                 <div>
                   <h2>Ollama</h2>
                   <p>Connected answer model</p>
                 </div>
               </div>
-              <span class="availability-pill">llama3.2:3b</span
-              ><small>Used for grounded document answers.</small>
+              <span class="availability-pill">llama3.2:3b</span>
+              <small>Used for grounded document answers.</small>
             </article>
           </section>
         </div>

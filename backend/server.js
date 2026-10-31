@@ -7,6 +7,7 @@ const path = require("path");
 const { upload, handleUpload, handleUrl } = require("./services/upload.service");
 const documentService = require("./services/document.service");
 const ragService = require("./services/rag.service");
+const { getCannedResponse } = require("./services/canned.service");
 
 const app = express();
 const port = Number(process.env.PORT) || 3000;
@@ -129,6 +130,13 @@ app.post("/api/query", async (request, response) => {
   try {
     const question = typeof request.body.question === "string" ? request.body.question.trim() : "";
     if (!question) return response.status(400).json({ error: "Enter a question." });
+
+    // Instantly return fixed response for common greetings/chitchat without invoking LLM
+    const canned = getCannedResponse(question);
+    if (canned) {
+      return response.json(canned);
+    }
+
     const history = Array.isArray(request.body.history)
       ? request.body.history
         .filter((message) => message && ["user", "assistant"].includes(message.role) && typeof message.content === "string")

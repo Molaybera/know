@@ -8,8 +8,14 @@
   </head>
   <body>
     <header class="viewer-header">
-      <strong id="viewer-title">Document reference</strong>
-      <span id="viewer-status"><span class="viewer-spinner"></span> Loading page…</span>
+      <div class="viewer-header-left">
+        <strong id="viewer-title">Document reference</strong>
+        <span id="viewer-badge" class="viewer-badge" hidden></span>
+      </div>
+      <div class="viewer-header-right">
+        <a id="viewer-external-link" class="viewer-action-btn" target="_blank" rel="noopener" hidden>Open live webpage ↗</a>
+        <span id="viewer-status"><span class="viewer-spinner"></span> Loading…</span>
+      </div>
     </header>
     <main id="pdf-document" class="viewer-main"></main>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.min.mjs" type="module"></script>

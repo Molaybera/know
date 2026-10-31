@@ -174,51 +174,62 @@
     return headingText;
   }
 
-  function renderReferences(citations) {
+  function renderReferences(citations, isConversational = false) {
+    if (isConversational) return "";
     const seen = new Set();
     const items = (citations || [])
       .map((citation) => {
         const label = citation.label || referenceLabel(citation);
-        const key = `${citation.document_id}|${label}|${citation.page}`;
+        const isUrl = citation.file_type === "url" || Boolean(citation.url);
+        const key = `${citation.document_id}|${label}|${citation.page}|${citation.url || ""}`;
         if (seen.has(key)) return "";
         seen.add(key);
-        const viewerUrl = `/pages/viewer.html?document=${encodeURIComponent(citation.document_id || "")}&page=${encodeURIComponent(citation.page || 1)}`;
-        const page = `<span class="reference-chip-page">Page ${escapeHtml(citation.page ?? "—")}</span>`;
+
+        const headingParam = citation.heading || label || "";
+        const viewerUrl = isUrl
+          ? `/pages/viewer.html?document=${encodeURIComponent(citation.document_id || "")}&section=${encodeURIComponent(headingParam)}`
+          : `/pages/viewer.html?document=${encodeURIComponent(citation.document_id || "")}&page=${encodeURIComponent(citation.page || 1)}`;
+
+        const pageBadge = isUrl
+          ? `<span class="reference-chip-page reference-chip-url">Webpage</span>`
+          : `<span class="reference-chip-page">Page ${escapeHtml(citation.page ?? "—")}</span>`;
+
+        const icon = isUrl ? "🌐" : "§";
+
         const text = label
           ? `<span class="reference-chip-label">${escapeHtml(label)}</span>`
           : `<span class="reference-chip-label">${escapeHtml(citation.document_name || "Document")}</span>`;
+
         const doc = label
           ? `<span class="reference-chip-doc">${escapeHtml(citation.document_name || "Document")}</span>`
           : "";
-        return `<a class="reference-chip" href="${viewerUrl}" target="_blank" rel="noopener"><span class="reference-chip-icon">§</span><span class="reference-chip-copy">${text}${doc}</span>${page}</a>`;
+
+        const externalLink = isUrl && citation.url
+          ? `<a class="reference-chip-ext" href="${escapeHtml(citation.url)}" target="_blank" rel="noopener" title="Open live URL (${escapeHtml(citation.url)})" onclick="event.stopPropagation()">↗ Live</a>`
+          : "";
+
+        return `<div class="reference-chip-wrapper"><a class="reference-chip" href="${viewerUrl}" target="_blank" rel="noopener" title="${isUrl ? 'View extracted section' : 'View PDF page'}"><span class="reference-chip-icon">${icon}</span><span class="reference-chip-copy">${text}${doc}</span>${pageBadge}</a>${externalLink}</div>`;
       })
       .filter(Boolean);
     if (!items.length) {
+      if (isConversational) return "";
       return `<div class="citation-list"><strong class="references-heading">Sources</strong><p class="no-references">No supporting references were found.</p></div>`;
     }
     return `<div class="citation-list"><strong class="references-heading">Sources <span class="references-count">${items.length}</span></strong><div class="reference-chips">${items.join("")}</div></div>`;
   }
 
   function renderAssistantMessage(message) {
-    const { summary, points, nextStep } = getAnswerParts(message);
+    const { summary, points } = getAnswerParts(message);
     const summaryHtml = summary
       ? `<p class="answer-summary">${escapeHtml(summary)}</p>`
       : "";
     const pointsHtml = points.length
       ? `<ul class="answer-points">${points.map((point) => `<li>${escapeHtml(point)}</li>`).join("")}</ul>`
       : "";
-    const nextStepHtml = nextStep
-      ? `<div class="next-step"><span class="next-step-label">Next step</span><span>${escapeHtml(nextStep)}</span></div>`
-      : "";
-    const escalation =
-      message.offer_escalation &&
-      !/head of hr|email/i.test(message.content || "")
-        ? `<div class="escalation-note">Would you like me to help draft an email to the Head of HR?</div>`
-        : "";
     const missing = message.missing_information
       ? `<small class="missing-information">${escapeHtml(message.missing_information)}</small>`
       : "";
-    return `<div class="chat-message assistant-message"><span class="message-label">Know AI <b class="answer-status ${statusClass(message.status)}">${escapeHtml(message.status || "")}</b></span>${summaryHtml}${pointsHtml}${nextStepHtml}${missing}${escalation}${renderReferences(message.citations)}</div>`;
+    return `<div class="chat-message assistant-message"><span class="message-label">Know AI <b class="answer-status ${statusClass(message.status)}">${escapeHtml(message.status || "")}</b></span>${summaryHtml}${pointsHtml}${missing}${renderReferences(message.citations, message.is_conversational)}</div>`;
   }
 
   function renderMessages() {
@@ -248,6 +259,13 @@
     }
     thread.scrollTop = thread.scrollHeight;
   }
+
+  input.addEventListener("keydown", (event) => {
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault();
+      form.requestSubmit();
+    }
+  });
 
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
@@ -290,6 +308,7 @@
         citations: result.citations || result.references,
         missing_information: result.missing_information,
         offer_escalation: result.offer_escalation,
+        is_conversational: Boolean(result.is_conversational),
       });
       chat.updatedAt = new Date().toISOString();
       chat.messages = messages.slice(-maxStoredMessages);

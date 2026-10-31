@@ -592,4 +592,36 @@
   font-weight: 700;
   padding: 4px 9px;
 }
+.reference-chip-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.reference-chip-wrapper .reference-chip {
+  flex: 1;
+}
+.reference-chip-ext {
+  align-items: center;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--purple);
+  display: inline-flex;
+  font-size: 11px;
+  font-weight: 600;
+  height: 38px;
+  padding: 0 10px;
+  text-decoration: none;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.reference-chip-ext:hover {
+  background: var(--purple);
+  border-color: var(--purple);
+  color: #fff;
+}
+.reference-chip-page.reference-chip-url {
+  background: #e8f7ef;
+  color: #1a7f37;
+}
  

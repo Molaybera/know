@@ -37,6 +37,13 @@
   font-size: 12px;
   margin: 0 0 20px;
 }
+.upload-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
 .upload-zone small {
   color: #a7afbc;
   display: block;

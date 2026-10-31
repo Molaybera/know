@@ -82,13 +82,24 @@
               accept=".pdf,.txt,.md,text/plain,text/markdown,application/pdf"
               multiple
               hidden
-            /><button
-              class="button button-primary"
-              id="choose-files"
-              type="button"
-            >
-              Choose files</button
-            ><small>Up to 10 files per upload · 25 MB maximum per file</small>
+            />
+            <div class="upload-actions">
+              <button
+                class="button button-primary"
+                id="choose-files"
+                type="button"
+              >
+                Choose files
+              </button>
+              <a
+                class="button button-secondary"
+                id="chat-webpage-button"
+                href="/pages/settings.html"
+              >
+                🌐 Chat with webpage
+              </a>
+            </div>
+            <small>Up to 10 files per upload · 25 MB maximum per file · Or import web policies in Settings</small>
             <p class="upload-feedback" id="upload-feedback" role="status"></p>
           </section>
           <section class="panel document-list">
